@@ -12,3 +12,13 @@ Test vectors references are availables here: http://csrc.nist.gov/groups/STM/cav
 # ECCCDH Primitive test vectors
 
 Test vectors references are available here: http://csrc.nist.gov/groups/STM/cavp/documents/components/ecccdhtestvectors.zip
+
+# Parameters
+
+This experimental test vectors generator uses openssl-1.0.2h
+
+# Compilation
+
+- You need first to download and build the openssl source code
+- Then make
+- And ./ecc_test_vectors
