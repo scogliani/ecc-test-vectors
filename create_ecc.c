@@ -1,7 +1,6 @@
 #include <create_ecc.h>
 #include <utils.h>
 
-#include "openssl-1.0.2h/e_os.h"
 #include <openssl/err.h>
 
 EC_GROUP* create_ecc(const char* kcp,
