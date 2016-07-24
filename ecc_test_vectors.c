@@ -5,8 +5,13 @@
 
 #include <string.h>
 
-int main()
+int main(int argc, char** argv)
 {
+  if (argc != 2)
+  {
+    return -1;
+  }
+
   EC_GROUP* secp192r1 =
       create_ecc("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFF",
                  "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFC",
@@ -85,26 +90,28 @@ int main()
   }
   CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ENABLE);
   ERR_load_crypto_strings();
- /* 
-  fprintf(stdout, "[secp192r1]\n");
-  ecc_pointmul(secp192r1);
 
-  fprintf(stdout, "[secp224r1]\n");
-  ecc_pointmul(secp224r1);
-*/
-  fprintf(stdout, "[secp256r1]\n");
-  ecc_pointmul(secp256r1);
-/*
-  fprintf(stdout, "[secp384r1]\n");
-  ecc_pointmul(secp384r1);
+  fprintf(stdout, "[%s]\n", argv[1]);
+  if (!strncmp("secp192r1", argv[1], 9))
+  { 
+    ecc_pointmul(secp192r1);
+  } else if (!strncmp("secp224r1", argv[1], 9)) {
+    ecc_pointmul(secp224r1);
+  } else if (!strncmp("secp256r1", argv[1], 9)) {
+    ecc_pointmul(secp256r1);
+  } else if (!strncmp("secp384r1", argv[1], 9)) {
+    ecc_pointmul(secp384r1);
+  } else if (!strncmp("secp521r1", argv[1], 9)) {
+    ecc_pointmul(secp521r1);
+  } else if (!strncmp("frp256v1", argv[1], 8)) {
+    ecc_pointmul(frp256v1);
+  } 
 
-  fprintf(stdout, "[secp521r1]\n");
-  ecc_pointmul(secp521r1);
-
-  fprintf(stdout, "[frp256v1]\n");
-  ecc_pointmul(frp256v1);
-*/
   EC_GROUP_free(frp256v1);
+  EC_GROUP_free(secp521r1);
+  EC_GROUP_free(secp384r1);
+  EC_GROUP_free(secp256r1);
+  EC_GROUP_free(secp224r1);
   EC_GROUP_free(secp192r1);
   CRYPTO_cleanup_all_ex_data();
   ERR_free_strings();
