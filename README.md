@@ -1,23 +1,27 @@
 # Elliptic curves cryptography test vectors
-Elliptic curves cryptography program for checking point multiplication, ECDH and ECDSA
 
-# Elliptic curves cryptography point multiplication
+Elliptic curves cryptography program for checking point multiplication, ECDH and ECDSA.
+For the moment, it only works on GFp and ECDH and ECDSA is not implemented yet.
+
+## Elliptic curves cryptography point multiplication
 
 Test vectors references are availables here: http://point-at-infinity.org/ecc/nisttv
 
-# ECDSA Signature Generation Component test vectors
+## ECDSA Signature Generation Component test vectors
 
 Test vectors references are availables here: http://csrc.nist.gov/groups/STM/cavp/documents/components/186-3ecdsasiggencomponenttestvectors.zip
 
-# ECCCDH Primitive test vectors
+
+
+## ECCCDH Primitive test vectors
 
 Test vectors references are available here: http://csrc.nist.gov/groups/STM/cavp/documents/components/ecccdhtestvectors.zip
 
-# Parameters
+## Parameters
 
 This experimental test vectors generator uses openssl-1.0.2h
 
-# Compilation
+## Compilation
 
 - You need first to download and build the openssl source code
 - Then make
