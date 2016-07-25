@@ -5,11 +5,11 @@ For the moment, it only works on GFp and ECDH and ECDSA is not implemented yet.
 
 ## Elliptic curves cryptography point multiplication
 
-Test vectors references are availables here: http://point-at-infinity.org/ecc/nisttv
+Test vectors references are available here: http://point-at-infinity.org/ecc/nisttv
 
 ## ECDSA Signature Generation Component test vectors
 
-Test vectors references are availables here: http://csrc.nist.gov/groups/STM/cavp/documents/components/186-3ecdsasiggencomponenttestvectors.zip
+Test vectors references are available here: http://csrc.nist.gov/groups/STM/cavp/documents/components/186-3ecdsasiggencomponenttestvectors.zip
 
 
 
