@@ -11,8 +11,6 @@ Test vectors references are available here: http://point-at-infinity.org/ecc/nis
 
 Test vectors references are available here: http://csrc.nist.gov/groups/STM/cavp/documents/components/186-3ecdsasiggencomponenttestvectors.zip
 
-
-
 ## ECCCDH Primitive test vectors
 
 Test vectors references are available here: http://csrc.nist.gov/groups/STM/cavp/documents/components/ecccdhtestvectors.zip
@@ -26,3 +24,7 @@ This experimental test vectors generator uses openssl-1.0.2h
 - You need first to download and build the openssl source code
 - Then make
 - And ./ecc_test_vectors
+
+## Parameters
+
+You can specify in compilation time ECDH or ECC_POINTMUL
