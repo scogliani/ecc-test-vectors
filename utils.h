@@ -14,5 +14,7 @@
     EXIT(1);                                               \
   } while (0)
 
+char* pt(unsigned char* md, size_t size);
+
 
 #endif /* UTILS_H__ */
