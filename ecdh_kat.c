@@ -102,7 +102,7 @@ void ecdh_kat(EC_GROUP* group,
 
   p = pt(Ztmp, Ztmplen);
   fprintf(stdout, "Secret = 0x%s\n", priv);
-  fprintf(stdout, "CounterKey = 0x%s%s\n", kcx0, kcy0);
+  fprintf(stdout, "CounterKey = %s%s\n", kcx0, kcy0);
   fprintf(stdout, "K = %s\n\n", p);
 
   free(p);
