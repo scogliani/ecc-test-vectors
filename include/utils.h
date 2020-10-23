@@ -1,7 +1,7 @@
 #ifndef UTILS_H__
 #define UTILS_H__
 
-#include "openssl-1.0.2h/e_os.h"
+#include <openssl/e_os.h>
 
 #include <openssl/err.h>
 
