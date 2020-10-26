@@ -15,11 +15,12 @@ ExternalProject_Add(${PROJECT_OPENSSL}
     GIT_REPOSITORY https://github.com/openssl/openssl
     GIT_TAG OpenSSL_1_0_2h
 
-    BUILD_IN_SOURCE 1
-    UPDATE_COMMANDE ""
-    CONFIGURE_COMMAND "./config"
+    UPDATE_COMMAND ""
     CMAKE_COMMAND ""
+    BUILD_IN_SOURCE 1
+    CONFIGURE_COMMAND "./config"
     BUILD_COMMAND ${MAKE}
+    TEST_BEFORE_INSTALL 1
     INSTALL_COMMAND ""
 )
 
