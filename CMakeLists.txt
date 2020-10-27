@@ -11,13 +11,16 @@ set(PROJECT_OPENSSL openssl)
 
 ExternalProject_Add(${PROJECT_OPENSSL}
     PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${PROJECT_OPENSSL}
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${PROJECT_OPENSSL}
+    TMP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${PROJECT_OPENSSL}-tmp
+    STAMP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${PROJECT_OPENSSL}-stamp
 
     GIT_REPOSITORY https://github.com/openssl/openssl
     GIT_TAG OpenSSL_1_0_2h
 
+    BUILD_IN_SOURCE 1
     UPDATE_COMMAND ""
     CMAKE_COMMAND ""
-    BUILD_IN_SOURCE 1
     CONFIGURE_COMMAND "./config"
     BUILD_COMMAND ${MAKE}
     TEST_BEFORE_INSTALL 1
@@ -44,13 +47,13 @@ add_dependencies(${PROJECT_NAME} ${PROJECT_OPENSSL})
 # We need this directory, and users of our library will need it too
 target_include_directories(${PROJECT_NAME} PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "${INSTALL_DIR_OPENSSL}/src"
-    "${INSTALL_DIR_OPENSSL}/src/openssl/include")
+    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty"
+    "${INSTALL_DIR_OPENSSL}/include")
 
 # set the compile options
 set(CMAKE_C_FLAGS "-g -ansi -std=c11 -Wall -Wextra -Wpedantic -Wconversion")
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC "ECDH")
+target_compile_definitions(${PROJECT_NAME} PUBLIC "ECC_POINTMUL")
 
 # Linking the libraries to the executable
 target_link_libraries(${PROJECT_NAME} PRIVATE "ssl" "crypto")
