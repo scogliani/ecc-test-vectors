@@ -30,6 +30,9 @@ ExternalProject_Add(${PROJECT_OPENSSL}
 ExternalProject_Get_Property(${PROJECT_OPENSSL} PREFIX)
 set(INSTALL_DIR_OPENSSL ${PREFIX})
 
+# set the compile options
+set(CMAKE_C_FLAGS "-ggdb -ansi -std=c11 -Wall -Wextra -Wpedantic -Wconversion -fsanitize=address -fno-omit-frame-pointer")
+
 set(REG_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 set(REG_INC "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
@@ -50,11 +53,12 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty"
     "${INSTALL_DIR_OPENSSL}/include")
 
-# set the compile options
-set(CMAKE_C_FLAGS "-g -ansi -std=c11 -Wall -Wextra -Wpedantic -Wconversion")
-
 target_compile_definitions(${PROJECT_NAME} PUBLIC "ECC_POINTMUL")
 
 # Linking the libraries to the executable
-target_link_libraries(${PROJECT_NAME} PRIVATE "ssl" "crypto")
-target_link_libraries(${PROJECT_NAME} PUBLIC "dl")
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    "-L${INSTALL_DIR_OPENSSL}"
+    "-lssl"
+    "-lcrypto"
+    "-ldl"
+)

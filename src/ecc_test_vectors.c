@@ -1,6 +1,7 @@
 #include <create_ecc.h>
 #include <ecc_pointmul.h>
 #include <ecdh_kat.h>
+#include <ecdsa.h>
 
 #include <openssl/err.h>
 
@@ -93,7 +94,7 @@ int main(int argc, char** argv)
   ERR_load_crypto_strings();
 
   fprintf(stdout, "[%s]\n", argv[1]);
-  
+
   if (!strncmp("secp192r1", argv[1], 9))
   {
 #if defined(ECC_POINTMUL)
@@ -548,8 +549,8 @@ int main(int argc, char** argv)
   EC_GROUP_free(secp224r1);
   EC_GROUP_free(secp192r1);
   CRYPTO_cleanup_all_ex_data();
-  ERR_free_strings();
   ERR_remove_thread_state(NULL);
+  ERR_free_strings();
   CRYPTO_mem_leaks_fp(stderr);
 
   return 0;

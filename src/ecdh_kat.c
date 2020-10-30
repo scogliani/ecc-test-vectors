@@ -26,7 +26,7 @@ void ecdh_kat(EC_GROUP* group,
   key = mk_eckey(group, priv);
   if (!key)
     ABORT;
-
+  /************************/
   x0 = BN_new();
   y0 = BN_new();
 
@@ -44,6 +44,7 @@ void ecdh_kat(EC_GROUP* group,
 
   if (!EC_POINT_set_affine_coordinates_GFp(group, pub, x0, y0, ctx))
     ABORT;
+  /************************/
 
   Ztmplen = (size_t)(EC_GROUP_get_degree(EC_KEY_get0_group(key)) + 7) / 8;
 
