@@ -9,7 +9,7 @@ Test vectors references are available here: http://point-at-infinity.org/ecc/nis
 
 ## ECDSA Signature Generation Component test vectors
 
-Test vectors references are available here: http://csrc.nist.gov/groups/STM/cavp/documents/components/186-3ecdsasiggencomponenttestvectors.zip
+Test vectors references are available here: http://csrc.nist.gov/groups/STM/cavp/documents/dss/186-3ecdsatestvectors.zip
 
 ## ECCCDH Primitive test vectors
 
