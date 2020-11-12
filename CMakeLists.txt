@@ -1,9 +1,18 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.5)
 
 # set the project name and version
 project(ecc_test_vectors
-        VERSION 1.0
+        VERSION 0.1
         LANGUAGES C)
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    # Let's ensure -std=cxx instead of -std=gxx
+    set(CMAKE_CX_EXTENSIONS OFF)
+
+    # specify the C standard 11
+    set(CMAKE_C_STANDARD 11)
+    set(CMAKE_C_STANDARD_REQUIRED True)
+endif()
 
 include(ExternalProject)
 
@@ -31,7 +40,7 @@ ExternalProject_Get_Property(${PROJECT_OPENSSL} PREFIX)
 set(INSTALL_DIR_OPENSSL ${PREFIX})
 
 # set the compile options
-set(CMAKE_C_FLAGS "-ggdb -ansi -std=c11 -Wall -Wextra -Wpedantic -Wconversion -fsanitize=address -fno-omit-frame-pointer")
+set(CMAKE_C_FLAGS "-ggdb -ansi -Wall -Wextra -Wpedantic -Wconversion -fsanitize=address -fno-omit-frame-pointer")
 
 set(REG_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 set(REG_INC "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
@@ -53,7 +62,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty"
     "${INSTALL_DIR_OPENSSL}/include")
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC "ECC_POINTMUL")
+  target_compile_definitions(${PROJECT_NAME} PUBLIC "ECDSA" "OPENSSL_THREADS")
 
 # Linking the libraries to the executable
 target_link_libraries(${PROJECT_NAME} PUBLIC

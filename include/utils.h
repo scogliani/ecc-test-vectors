@@ -1,5 +1,5 @@
-#ifndef UTILS_H__
-#define UTILS_H__
+#ifndef _UTILS_H__
+#define _UTILS_H__
 
 #include <openssl/e_os.h>
 
@@ -14,7 +14,4 @@
     EXIT(1);                                               \
   } while (0)
 
-char* pt(unsigned char* md, size_t size);
-
-
-#endif /* UTILS_H__ */
+#endif /* _UTILS_H__ */
