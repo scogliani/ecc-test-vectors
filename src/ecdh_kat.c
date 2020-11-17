@@ -3,8 +3,8 @@
 
 #include <ecc.h>
 #include <ecdh_kat.h>
-#include <utils.h>
 #include <mk_eckey.h>
+#include <utils.h>
 
 /**
  * Creates an elliptic curve cryptography (y^2 = x^3 + ax + b (mod p))
@@ -18,8 +18,8 @@ char *ecdh_kat(EC_GROUP const *group, const char *priv, const char *kcx0,
                const char *kcy0)
 {
   EC_KEY *key = NULL;
-  size_t Ztmplen;
   unsigned char *Ztmp = NULL;
+  size_t Ztmplen;
   char *p;
 
   if (!(key = mk_eckey(group, priv, kcx0, kcy0)))
@@ -34,8 +34,15 @@ char *ecdh_kat(EC_GROUP const *group, const char *priv, const char *kcx0,
 
   p = pt(Ztmp, Ztmplen);
 
-  OPENSSL_free(Ztmp);
-  EC_KEY_free(key);
+  if (Ztmp)
+  {
+    OPENSSL_free(Ztmp);
+  }
+
+  if (key)
+  {
+    EC_KEY_free(key);
+  }
 
   return p;
 }
@@ -952,5 +959,4 @@ void ecdh_parameters_set_values(EC_GROUP const *group,
     return;
   }
 }
-
 

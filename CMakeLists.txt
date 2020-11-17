@@ -40,7 +40,7 @@ ExternalProject_Get_Property(${PROJECT_OPENSSL} PREFIX)
 set(INSTALL_DIR_OPENSSL ${PREFIX})
 
 # set the compile options
-set(CMAKE_C_FLAGS "-ggdb -ansi -Wall -Wextra -Wpedantic -Wconversion -fsanitize=address -fno-omit-frame-pointer")
+set(CMAKE_C_FLAGS "-ggdb -Wall -Wextra -Wpedantic -Wconversion -fsanitize=address -fno-omit-frame-pointer")
 
 set(REG_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 set(REG_INC "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
@@ -61,8 +61,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty"
     "${INSTALL_DIR_OPENSSL}/include")
-
-  target_compile_definitions(${PROJECT_NAME} PUBLIC "ECDSA" "OPENSSL_THREADS")
 
 # Linking the libraries to the executable
 target_link_libraries(${PROJECT_NAME} PUBLIC

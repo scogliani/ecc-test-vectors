@@ -8,54 +8,99 @@ void ecc_coord_init(Ecc_coord *ecc_coord)
 {
   if (!(ecc_coord->x = BN_new()))
   {
-    ABORT;
+    goto err;
   }
 
   if (!(ecc_coord->y = BN_new()))
   {
-    ABORT;
+    goto err;
   }
+
+  return;
+
+err:
+  ERR_print_errors_fp(stderr);
+
+  ecc_coord_destroy(ecc_coord);
 }
 
 void ecc_coord_destroy(Ecc_coord *ecc_coord)
 {
-  BN_free(ecc_coord->x);
-  BN_free(ecc_coord->y);
+  if (ecc_coord->x)
+  {
+    BN_free(ecc_coord->x);
+  }
+
+  if (ecc_coord->y)
+  {
+    BN_free(ecc_coord->y);
+  }
 }
 
-void ecc_pointmul(Ecc_coord ecc_coord, EC_GROUP const *group, const char *m)
+void ecc_pointmul(Ecc_coord *ecc_coord, EC_GROUP *group, const char *m)
 {
-  BN_CTX *ctx;
-  BIGNUM *mul;
-  EC_POINT *point;
+  BN_CTX *ctx = NULL;
+  BIGNUM *mul = NULL;
+  EC_POINT *point = NULL;
 
-  mul = BN_new();
+  if (!(mul = BN_new()))
+  {
+    goto err;
+  }
 
-  if (!mul)
-    ABORT;
+  if (!(ctx = BN_CTX_new()))
+  {
+    goto err;
+  }
 
-  ctx = BN_CTX_new();
-  if (!ctx)
-    ABORT;
-
-  point = EC_POINT_new(group);
-
-  if (!point)
-    ABORT;
+  if (!(point = EC_POINT_new(group)))
+  {
+    goto err;
+  }
 
   if (!BN_dec2bn(&mul, m))
+  {
+    goto err;
+  }
+
+  if (!EC_GROUP_precompute_mult(group, ctx))
+  {
     ABORT;
+  }
 
   if (!EC_POINT_mul(group, point, mul, NULL, NULL, ctx))
+  {
     ABORT;
+  }
 
-  if (!EC_POINT_get_affine_coordinates_GFp(group, point, ecc_coord.x,
-                                           ecc_coord.y, ctx))
+  if (EC_POINT_is_at_infinity(group, point))
+  {
     ABORT;
+  }
 
-  EC_POINT_free(point);
-  BN_free(mul);
-  BN_CTX_free(ctx);
+  if (!EC_POINT_get_affine_coordinates_GFp(group, point, ecc_coord->x,
+                                           ecc_coord->y, ctx))
+  {
+    ABORT;
+  }
+
+err:
+  ERR_print_errors_fp(stderr);
+
+  if (point)
+  {
+    EC_POINT_free(point);
+  }
+
+  if (mul)
+  {
+    BN_free(mul);
+  }
+
+  if (ctx)
+  {
+    BN_CTX_free(ctx);
+  }
 }
 
 void ecc_coord_k_values(const char *array[ECC_POINTMUL_TEST_VECTOR_SIZE],

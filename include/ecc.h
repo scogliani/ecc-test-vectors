@@ -3,12 +3,14 @@
 
 #include <openssl/ec.h>
 
-EC_GROUP* secp192r1;
-EC_GROUP* secp224r1;
-EC_GROUP* secp256r1;
-EC_GROUP* secp384r1;
-EC_GROUP* secp521r1;
-EC_GROUP* frp256v1;
+#define NUM_EC 6
+
+EC_GROUP *secp192r1;
+EC_GROUP *secp224r1;
+EC_GROUP *secp256r1;
+EC_GROUP *secp384r1;
+EC_GROUP *secp521r1;
+EC_GROUP *frp256v1;
 
 void init_ecc();
 void destroy_ecc();

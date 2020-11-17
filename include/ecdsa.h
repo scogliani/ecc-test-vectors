@@ -21,10 +21,11 @@ typedef struct
  *  @param d The private key of the ECDSA protocol
  *  @param k The public key of the ECDSA protocol
  */
-ECDSA_SIG *ecdsa_deterministic_sign(EC_GROUP const *group, const char *msg,
-                                    const EVP_MD *(*hash)(), const char *d, const char *k);
+ECDSA_SIG *ecdsa_deterministic_sign(EC_GROUP const *group,
+                                    const EVP_MD *(*hash)(), const char *msg,
+                                    int dgst_len, const char *d, const char *k);
 
 void ecdsa_parameters_set_values(EC_GROUP const *group, int dgst_len,
-                                Ecdsa_parameters array[ECDSA_TEST_VECTOR]);
+                                 Ecdsa_parameters array[ECDSA_TEST_VECTOR]);
 
 #endif /* _ECDSA_H__ */

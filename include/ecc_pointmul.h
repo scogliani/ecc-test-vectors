@@ -27,7 +27,7 @@ void ecc_coord_destroy(Ecc_coord *ecc_coord);
  * @param group the P element from the point multiplication
  * @param k Element multiply to
  */
-void ecc_pointmul(Ecc_coord ecc_coord, EC_GROUP const *group, const char *m);
+void ecc_pointmul(Ecc_coord *ecc_coord, EC_GROUP *group, const char *m);
 
 /** Set k values to an array
  * @param array The array to set

@@ -14,16 +14,23 @@
 static int change_rand(void);
 static int restore_rand(void);
 static int fbytes(unsigned char *buf, int num);
-static void unhexlify();
+static void unhexlify(unsigned char *msg_hex, const char *msg);
+static void digest_msg(unsigned char *digest, unsigned char *msg_hex,
+                       const size_t msg_hex_size, const EVP_MD *(*hash)());
 
 static RAND_METHOD fake_rand;
 static const RAND_METHOD *old_rand;
+
+static int fbytes_counter = 0;
+static char *numbers[2];
 
 int change_rand(void)
 {
   /* save old rand method */
   if ((old_rand = RAND_get_rand_method()) == NULL)
+  {
     return 0;
+  }
 
   fake_rand.seed = old_rand->seed;
   fake_rand.cleanup = old_rand->cleanup;
@@ -37,7 +44,9 @@ int change_rand(void)
 
   /* set new RAND_METHOD */
   if (!RAND_set_rand_method(&fake_rand))
+  {
     return 0;
+  }
 
   return 1;
 }
@@ -45,14 +54,15 @@ int change_rand(void)
 int restore_rand(void)
 {
   if (!RAND_set_rand_method(old_rand))
+  {
     return 0;
+  }
 
   else
+  {
     return 1;
+  }
 }
-
-static int fbytes_counter = 0;
-static char *numbers[2];
 
 int fbytes(unsigned char *buf, int num)
 {
@@ -60,12 +70,16 @@ int fbytes(unsigned char *buf, int num)
   BIGNUM *tmp = NULL;
 
   if (fbytes_counter >= 2)
+  {
     return 0;
+  }
 
   tmp = BN_new();
 
   if (!tmp)
+  {
     return 0;
+  }
 
   if (!BN_dec2bn(&tmp, numbers[fbytes_counter]))
   {
@@ -76,47 +90,60 @@ int fbytes(unsigned char *buf, int num)
   fbytes_counter++;
 
   if (num != BN_num_bytes(tmp) || !BN_bn2bin(tmp, buf))
+  {
     ret = 0;
+  }
   else
+  {
     ret = 1;
+  }
 
   BN_free(tmp);
   return ret;
 }
 
-ECDSA_SIG *ecdsa_deterministic_sign(EC_GROUP const *group, const char *msg,
-                                    const EVP_MD *(*hash)(), const char *d,
-                                    const char *k)
+void unhexlify(unsigned char *msg_hex, const char *msg)
 {
-  ECDSA_SIG *sign = NULL;
-  EC_KEY *key = NULL;
-  BIGNUM *priv = NULL;
-  BIGNUM *pub = NULL;
-  EVP_MD_CTX md_ctx;
-  unsigned char digest[SHA224_DIGEST_LENGTH];
-
-  const size_t msg_hex_size = strlen(msg) / 2;
-  unsigned char msg_hex[msg_hex_size];
-
   size_t i;
   char sub[3];
 
-  /* unhexlify */
   for (sub[2] = '\0', i = 0; i < strlen(msg); i += 2)
   {
     memcpy(sub, &msg[i], 2);
 
     msg_hex[i / 2] = (unsigned char)strtol(sub, NULL, 16);
   }
+}
 
-  /* digest_msg */
+void digest_msg(unsigned char *digest, unsigned char *msg_hex,
+                const size_t msg_hex_size, const EVP_MD *(*hash)())
+{
+  EVP_MD_CTX md_ctx;
+
   EVP_MD_CTX_init(&md_ctx);
-
   EVP_DigestInit(&md_ctx, hash());
   EVP_DigestUpdate(&md_ctx, (const void *)msg_hex, msg_hex_size);
   EVP_DigestFinal(&md_ctx, digest, NULL);
 
   EVP_MD_CTX_cleanup(&md_ctx);
+}
+
+ECDSA_SIG *ecdsa_deterministic_sign(EC_GROUP const *group,
+                                    const EVP_MD *(*hash)(), const char *msg,
+                                    int dgst_len, const char *d, const char *k)
+{
+  ECDSA_SIG *sign = NULL;
+  EC_KEY *key = NULL;
+  BIGNUM *priv = NULL;
+  BIGNUM *pub = NULL;
+
+  unsigned char digest[dgst_len];
+  const size_t msg_hex_size = strlen(msg) / 2;
+  unsigned char msg_hex[msg_hex_size];
+
+  unhexlify(msg_hex, msg);
+
+  digest_msg(digest, msg_hex, msg_hex_size, hash);
 
   if (!change_rand())
     ABORT;
@@ -142,7 +169,7 @@ ECDSA_SIG *ecdsa_deterministic_sign(EC_GROUP const *group, const char *msg,
   if (!EC_KEY_generate_key(key))
     ABORT;
 
-  if (!(sign = ECDSA_do_sign(digest, SHA224_DIGEST_LENGTH, key)))
+  if (!(sign = ECDSA_do_sign(digest, dgst_len, key)))
     ABORT;
 
   if (!restore_rand())
@@ -165,7 +192,6 @@ ECDSA_SIG *ecdsa_deterministic_sign(EC_GROUP const *group, const char *msg,
 
   OPENSSL_free(numbers[0]);
   OPENSSL_free(numbers[1]);
-
 
   return sign;
 }
