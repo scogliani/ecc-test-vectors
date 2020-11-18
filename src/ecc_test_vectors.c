@@ -224,7 +224,7 @@ int main(int argc, char **argv) {
   }
 
   else if (!strncmp("ecdsa", function, 5)) {
-    fprintf(stdout, "[%s, %s]\n", ec_name, hash_name);
+    fprintf(stdout, "Group = %s\nHash = SHA-%s\n\n", ec_name, hash_name);
     ecdsa2(*ec_group, hash);
   }
 

@@ -1,7 +1,9 @@
 # Elliptic curves cryptography test vectors
 
 Elliptic curves cryptography program for checking point multiplication, ECDH and ECDSA.
-For the moment, it only works on GFp and ECDH and ECDSA is not implemented yet.
+The output is based on test vectors from [Botan project](https://github.com/randombit/botan)
+
+For the moment, it is POSIX dependant (getopt usage)
 
 ## Elliptic curves cryptography point multiplication
 
@@ -19,12 +21,15 @@ Test vectors references are available here: http://csrc.nist.gov/groups/STM/cavp
 
 This experimental test vectors generator uses openssl-1.0.2h
 
+## What is needed?
+
+- CMake
+- A C compiler (gcc, clang, ...)
+
 ## Compilation
 
-- You need first to download and build the openssl source code
-- Then make
-- And ./ecc_test_vectors
+- cmake .
 
-## Parameters
+## Usage
 
-You can specify in compilation time ECDH or ECC_POINTMUL
+`./ecc_test_vectors [-e] { secp192r1 | secp224r1 | secp256r1 | secp384r1 | secp521r1 | frp256v1 } [-f] { ecc_pointmul | ecdh | ecdsa } [-h] { 224 | 256 | 384 | 512 }`
