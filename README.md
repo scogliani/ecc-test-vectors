@@ -25,6 +25,7 @@ This experimental test vectors generator uses openssl-1.0.2h
 
 - CMake
 - A C compiler (gcc, clang, ...)
+- AddressSanitizer
 
 ## Compilation
 
