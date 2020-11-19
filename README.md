@@ -34,3 +34,12 @@ This experimental test vectors generator uses openssl-1.0.2h
 ## Usage
 
 `./ecc_test_vectors [-e] { secp192r1 | secp224r1 | secp256r1 | secp384r1 | secp521r1 | frp256v1 } [-f] { ecc_pointmul | ecdh | ecdsa } [-h] { 224 | 256 | 384 | 512 }`
+
+-e
+  Specify the elliptic curve cryptography
+
+-f
+  Specify the function
+
+-h
+  Specify the sha hash function (sha224, sha256, sha384 or sha512)
